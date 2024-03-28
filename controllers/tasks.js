@@ -32,9 +32,6 @@ const getTasks=async(req,res)=>{
 
     }
 }
-const updateTasks=(req,res)=>{
-    res.send('update Tasks')
-}
 const deleteTasks=async(req,res)=>{
     try {
         const {id:taskId}=req.params 
@@ -45,11 +42,28 @@ const deleteTasks=async(req,res)=>{
         res.status(200).json({task})
 
     } catch (error) {
-        res.status(500).json({msg:error})
-
+        return res.status(404).json({msg:`no task id with : ${taskId}`})
+        
     }
 }
 
+const updateTasks=async(req,res)=>{
+    try {
+        const {id:taskId}=req.params
+        const task=await Task.findOneAndUpdate({_id:taskId},req.body,{
+            new:true,
+            runValidators:true
+        })
+        if(!task){
+            return res.status(404).json({msg:`no task id with : ${taskId}`})
+
+        }
+        res.status(200).json({task})
+    } catch (error) { 
+        return res.status(404).json({msg:`no task id with : ${taskId}`})
+
+    }
+}
 
 module.exports={
     getAllTasks,createTask,

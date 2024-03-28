@@ -5,6 +5,7 @@ const connectDB=require('./db/connect')
 require('dotenv').config()
 
 //middleware
+app.use(express.static('./public'))   //to serve static files
 app.use(express.json())
 
 //routes
